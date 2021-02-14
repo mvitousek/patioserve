@@ -1,0 +1,16 @@
+/* composes? */
+.menuItem {
+  padding: 0;
+  height: 100%;
+  position: relative;
+  padding: .5em .5em .5em .5em;
+}
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  width: 100%;
+  height: 100%;
+}

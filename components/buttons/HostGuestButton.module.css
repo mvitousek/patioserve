@@ -1,0 +1,11 @@
+
+.hostGuestButton {
+  position: fixed;
+  bottom: 4px;
+  right: 10px;
+  height: 45px;
+  width: 90px;
+  border-color: #565d64;
+  border: solid;
+  border-width: 1px 1px 1px 1px;
+}

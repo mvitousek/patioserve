@@ -7,7 +7,7 @@
 [libs]
 
 [lints]
-unclear-type=error
+unclear-type=warn
 unsafe-getters-setters=error
 untyped-type-import=error
 
