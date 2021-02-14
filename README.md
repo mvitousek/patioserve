@@ -1,1 +1,3 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+
+# patioserve
+Simple customizable menu, to make it easier to show friends what you can bring them from inside in pandemic-era socially distanced gatherings.
