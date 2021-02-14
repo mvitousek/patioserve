@@ -8,20 +8,22 @@ import EditItem from "../EditItem";
 import Modal from "../Modal";
 
 type ButtonProps = {
-  itemID: number,
   itemInfo?: ItemType,
+  itemID: number,
+  onSubmit: (ItemType) => void,
 };
 
-const FORMNAME = "edititem";
-
 export default function EditButton({
-  itemID,
   itemInfo,
+  itemID,
+  onSubmit,
 }: ButtonProps): React.Node {
   const [show, setShow] = React.useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const formName = `edititem_${itemID}`;
 
   return (
     <>
@@ -30,11 +32,12 @@ export default function EditButton({
         show={show}
         onCancel={handleClose}
         onConfirm={handleClose}
-        formName={FORMNAME}
+        formName={formName}
       >
         <EditItem
           show={show}
-          formName={FORMNAME}
+          onSubmit={onSubmit}
+          formName={formName}
           itemInfo={itemInfo ?? { name: "", description: "" }}
         />
       </Modal>

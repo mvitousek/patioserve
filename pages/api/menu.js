@@ -1,6 +1,6 @@
 // @flow
 
-import { getMenu, getCounts } from "../../lib/AvailableItems";
+import { getMenu } from "../../lib/AvailableItems";
 
 export default function handler(req: any, res: any) {
   let toSend = getMenu();

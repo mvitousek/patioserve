@@ -5,7 +5,6 @@ import * as React from "react";
 import utilStyles from "../styles/utils.module.css";
 
 import useSWR from "swr";
-import MenuItem from "./MenuItem";
 import { type MenuType } from "../lib/ItemTypes.js";
 import HostGuestButton from "./buttons/HostGuestButton";
 import OrderButton from "./buttons/OrderButton";

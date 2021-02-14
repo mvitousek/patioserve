@@ -3,10 +3,8 @@
 import * as React from "react";
 
 import styles from "./HostInterface.module.css";
-import utilStyles from "../styles/utils.module.css";
 
 import useSWR from "swr";
-import MenuItem from "./MenuItem";
 import { type MenuType } from "../lib/ItemTypes.js";
 import HostGuestButton from "./buttons/HostGuestButton";
 import HostControlPanel from "./HostControlPanel";
@@ -31,11 +29,33 @@ function useMenu() {
     }
   }
 
+  function mutateNameDescription(id, itemInfo) {
+    if (data?.menu != null) {
+      mutate(
+        {
+          ...data,
+          menu: {
+            ...data.menu,
+            items: data.menu.items.map((item) => {
+              if (item.id === id) {
+                return { ...item, itemInfo };
+              } else {
+                return item;
+              }
+            }),
+          },
+        },
+        false
+      );
+    }
+  }
+
   return {
     newMenu: data?.menu,
     newCounts: data?.counts,
     revalidate: mutate,
     mutateResetAll,
+    mutateNameDescription,
   };
 }
 
@@ -54,7 +74,13 @@ export default function HostInterface(menuData: MenuType): React.Node {
     setContext(modalRef.current);
   }, []);
 
-  const { newMenu, newCounts, revalidate, mutateResetAll } = useMenu();
+  const {
+    newMenu,
+    newCounts,
+    revalidate,
+    mutateResetAll,
+    mutateNameDescription,
+  } = useMenu();
 
   if (newCounts != null && newCounts != counts) {
     setCounts(newCounts);
@@ -71,6 +97,14 @@ export default function HostInterface(menuData: MenuType): React.Node {
     }).finally(revalidate);
   };
 
+  let onSubmit = (itemInfo, itemID) => {
+    mutateNameDescription(itemID, itemInfo);
+    fetch("/api/set", {
+      method: "POST",
+      body: JSON.stringify({ id: itemID, ...itemInfo }),
+    }).finally(revalidate);
+  };
+
   return (
     <>
       <Context.Provider value={context}>
@@ -82,6 +116,7 @@ export default function HostInterface(menuData: MenuType): React.Node {
             <EditButton
               itemID={itemID}
               itemInfo={menu.items.find(({ id }) => id === itemID)?.itemInfo}
+              onSubmit={(itemInfo) => onSubmit(itemInfo, itemID)}
             />
           )}
           SecondButtonComponent={({ itemID }) => (

@@ -4,10 +4,13 @@ import type { ItemType } from "../lib/ItemTypes";
 
 import * as React from "react";
 
+import styles from "./EditItem.module.css";
+
 type Props = {
   show: boolean,
   formName: string,
   itemInfo?: ItemType,
+  onSubmit: (ItemType) => void,
 };
 
 export default function EditItem(props: Props): React.Node {
@@ -34,7 +37,7 @@ export default function EditItem(props: Props): React.Node {
 
   function onSubmit(event) {
     event.preventDefault();
-    console.log(name, description);
+    props.onSubmit({ name, description });
   }
 
   return (
@@ -42,6 +45,7 @@ export default function EditItem(props: Props): React.Node {
       <label htmlFor="name">Item name:</label>
       <br />
       <input
+        className={styles.input}
         type="text"
         name="name"
         value={name}
@@ -50,7 +54,12 @@ export default function EditItem(props: Props): React.Node {
       <br />
       <label htmlFor="desc">Description:</label>
       <br />
-      <textarea name="desc" value={description} onChange={handleInputChange} />
+      <textarea
+        className={styles.input}
+        name="desc"
+        value={description}
+        onChange={handleInputChange}
+      />
       <br />
       <br />
     </form>
