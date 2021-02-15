@@ -1,7 +1,7 @@
 // flow-typed signature: 883d1ffd89c1dd19944fb3d4876938c0
 // flow-typed version: 302d4b65e2/react-dom_v17.x.x/flow_>=v0.127.x
 
-declare module "react-dom" {
+declare module 'react-dom' {
   declare var version: string;
 
   declare function findDOMNode(
@@ -46,7 +46,7 @@ declare module "react-dom" {
   ): React$ElementRef<ElementType>;
 }
 
-declare module "react-dom/server" {
+declare module 'react-dom/server' {
   declare var version: string;
 
   declare function renderToString(element: React$Node): string;
@@ -60,7 +60,7 @@ declare module "react-dom/server" {
   ): stream$Readable;
 }
 
-declare module "react-dom/test-utils" {
+declare module 'react-dom/test-utils' {
   declare type Thenable = {
     then(resolve: () => mixed, reject?: () => mixed): mixed,
     ...

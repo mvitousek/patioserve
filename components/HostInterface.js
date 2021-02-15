@@ -16,7 +16,7 @@ import EditItem from "./EditItem";
 import EditCategory from "./EditCategory";
 import type { MenuInfo } from "../lib/ItemTypes";
 
-export const Context: React.Context<any> = React.createContext();
+export const Context: React.Context<?Element> = React.createContext();
 
 export default function HostInterface(menuData: MenuInfo): React.Node {
   let [data, setData] = React.useState(menuData);
