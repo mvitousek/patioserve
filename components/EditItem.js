@@ -6,14 +6,16 @@ import * as React from "react";
 
 import styles from "./EditItem.module.css";
 
-type Props = {
+export type Props<T> = {
   show: boolean,
   formName: string,
-  itemInfo?: ItemType,
-  onSubmit: (ItemType) => void,
+  itemInfo?: T,
+  setEnabled: (boolean) => void,
+  shouldBeEnabled: (T) => boolean,
+  onSubmit: (T) => void,
 };
 
-export default function EditItem(props: Props): React.Node {
+export default function EditItem(props: Props<ItemType>): React.Node {
   const [name, setName] = React.useState(props.itemInfo?.name ?? "");
   const [description, setDescription] = React.useState(
     props.itemInfo?.description ?? ""
@@ -30,6 +32,9 @@ export default function EditItem(props: Props): React.Node {
     const target = event.target;
     if (target.name === "name") {
       setName(target.value);
+      props.setEnabled(
+        props.shouldBeEnabled({ name: target.value, description })
+      );
     } else {
       setDescription(target.value);
     }
@@ -37,7 +42,7 @@ export default function EditItem(props: Props): React.Node {
 
   function onSubmit(event) {
     event.preventDefault();
-    props.onSubmit({ name, description });
+    if (name) props.onSubmit({ name, description });
   }
 
   return (
@@ -50,6 +55,7 @@ export default function EditItem(props: Props): React.Node {
         name="name"
         value={name}
         onChange={handleInputChange}
+        onSubmit={(e) => e.preventDefault()}
       />
       <br />
       <label htmlFor="desc">Description:</label>
@@ -60,7 +66,6 @@ export default function EditItem(props: Props): React.Node {
         value={description}
         onChange={handleInputChange}
       />
-      <br />
       <br />
     </form>
   );

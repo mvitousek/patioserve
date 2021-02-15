@@ -4,66 +4,22 @@ import * as React from "react";
 
 import styles from "./HostInterface.module.css";
 
-import useSWR from "swr";
-import { type MenuType } from "../lib/ItemTypes.js";
-import HostGuestButton from "./buttons/HostGuestButton";
+import HostGuestButton from "./HostGuestButton";
 import HostControlPanel from "./HostControlPanel";
 import HostCategoryPanel from "./HostCategoryPanel";
-import EditButton from "./buttons/EditButton";
-import DeleteButton from "./buttons/DeleteButton";
+import EditModal from "./EditModal";
 import MenuList from "./MenuList";
-
-function useMenu() {
-  const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, mutate } = useSWR("/api/menu", fetcher, {
-    refreshInterval: 1000,
-  });
-
-  function mutateResetAll(): void {
-    if (data?.counts != null) {
-      const newCounts = {};
-      Object.keys(data.counts).forEach(
-        (key) => (newCounts[Number.parseInt(key)] = 0)
-      );
-      mutate({ ...data, counts: newCounts }, false);
-    }
-  }
-
-  function mutateNameDescription(id, itemInfo) {
-    if (data?.menu != null) {
-      mutate(
-        {
-          ...data,
-          menu: {
-            ...data.menu,
-            items: data.menu.items.map((item) => {
-              if (item.id === id) {
-                return { ...item, itemInfo };
-              } else {
-                return item;
-              }
-            }),
-          },
-        },
-        false
-      );
-    }
-  }
-
-  return {
-    newMenu: data?.menu,
-    newCounts: data?.counts,
-    revalidate: mutate,
-    mutateResetAll,
-    mutateNameDescription,
-  };
-}
+import useMenu from "../lib/useMenu";
+import ActionButton from "./ActionButton";
+import DeleteModal from "./DeleteModal";
+import EditItem from "./EditItem";
+import EditCategory from "./EditCategory";
+import type { MenuInfo } from "../lib/ItemTypes";
 
 export const Context: React.Context<any> = React.createContext();
 
-export default function HostInterface(menuData: MenuType): React.Node {
-  let [menu, setMenu] = React.useState(menuData.menu);
-  let [counts, setCounts] = React.useState(menuData.counts);
+export default function HostInterface(menuData: MenuInfo): React.Node {
+  let [data, setData] = React.useState(menuData);
 
   const modalRef = React.useRef();
   const [context, setContext] = React.useState();
@@ -75,20 +31,14 @@ export default function HostInterface(menuData: MenuType): React.Node {
   }, []);
 
   const {
-    newMenu,
-    newCounts,
     revalidate,
     mutateResetAll,
     mutateNameDescription,
-  } = useMenu();
-
-  if (newCounts != null && newCounts != counts) {
-    setCounts(newCounts);
-  }
-
-  if (newMenu != null && newMenu != menu) {
-    setMenu(newMenu);
-  }
+    mutateDelete,
+    mutateAdd,
+    mutateAddCategory,
+    mutateDeleteCategory,
+  } = useMenu(setData, data);
 
   let resetAll = () => {
     mutateResetAll();
@@ -97,39 +47,106 @@ export default function HostInterface(menuData: MenuType): React.Node {
     }).finally(revalidate);
   };
 
-  let onSubmit = (itemInfo, itemID) => {
+  let onEditItem = (itemInfo, itemID) => {
     mutateNameDescription(itemID, itemInfo);
     fetch("/api/set", {
       method: "POST",
-      body: JSON.stringify({ id: itemID, ...itemInfo }),
+      body: JSON.stringify({ id: itemID, itemInfo }),
+    }).finally(revalidate);
+  };
+
+  let onDeleteItem = (itemID) => {
+    mutateDelete(itemID);
+    fetch("/api/delete", {
+      method: "POST",
+      body: String(itemID),
+    }).finally(revalidate);
+  };
+
+  let onAddItem = (categoryID, itemInfo) => {
+    mutateAdd(categoryID, itemInfo);
+    fetch("/api/new", {
+      method: "POST",
+      body: JSON.stringify({ categoryID, itemInfo }),
+    }).finally(revalidate);
+  };
+
+  let onAddCategory = (categoryName) => {
+    mutateAddCategory(categoryName);
+    fetch("/api/newcat", {
+      method: "POST",
+      body: categoryName,
+    }).finally(revalidate);
+  };
+
+  let onDeleteCategory = (categoryID) => {
+    mutateDeleteCategory(categoryID);
+    fetch("/api/deletecat", {
+      method: "POST",
+      body: String(categoryID),
+    }).finally(revalidate);
+  };
+
+  let onSetBulk = (menu: string) => {
+    fetch("/api/setraw", {
+      method: "POST",
+      body: menu,
     }).finally(revalidate);
   };
 
   return (
     <>
       <Context.Provider value={context}>
-        <HostControlPanel reset={resetAll} />
+        <HostControlPanel
+          reset={resetAll}
+          onSetBulk={onSetBulk}
+          menu={data.menu}
+        />
         <MenuList
-          menuInfo={{ menu, counts }}
-          CategoryHeaderComponent={HostCategoryPanel}
+          menuInfo={data.menu}
+          CategoryHeaderComponent={(props) => (
+            <HostCategoryPanel
+              {...props}
+              onAdd={onAddItem}
+              onDelete={onDeleteCategory}
+            />
+          )}
           FirstButtonComponent={({ itemID }) => (
-            <EditButton
-              itemID={itemID}
-              itemInfo={menu.items.find(({ id }) => id === itemID)?.itemInfo}
-              onSubmit={(itemInfo) => onSubmit(itemInfo, itemID)}
+            <EditModal
+              shouldBeEnabled={(itemInfo) =>
+                itemInfo?.name != null && itemInfo.name != ""
+              }
+              formName={`edititem_${String(itemID)}`}
+              itemInfo={data.menu.items[itemID]}
+              onSubmit={(itemInfo) => onEditItem(itemInfo, itemID)}
+              Editor={EditItem}
+              Button={({ onClick }) => (
+                <ActionButton text="e" onClick={onClick} />
+              )}
             />
           )}
           SecondButtonComponent={({ itemID }) => (
-            <DeleteButton
-              itemID={itemID}
-              itemName={
-                menu.items.find(({ id }) => id === itemID)?.itemInfo.name
-              }
+            <DeleteModal
+              Button={({ onClick }) => (
+                <ActionButton text="×" onClick={onClick} />
+              )}
+              itemName={data.menu.items[itemID].name}
+              onSubmit={() => onDeleteItem(itemID)}
             />
           )}
         />
         <div className={styles.newCategory}>
-          <button className="pure-button">Add category</button>
+          <EditModal
+            shouldBeEnabled={(cat) => cat != null && cat != ""}
+            formName={"newcategory"}
+            onSubmit={onAddCategory}
+            Editor={EditCategory}
+            Button={({ onClick }) => (
+              <button className="pure-button" onClick={onClick}>
+                Add category
+              </button>
+            )}
+          />
         </div>
       </Context.Provider>
       <HostGuestButton href="/" text="Guest" />

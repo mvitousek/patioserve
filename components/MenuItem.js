@@ -11,7 +11,7 @@ import ItemInfo from "./ItemInfo.js";
 export type Props = {
   itemInfo: ItemType,
   children: React.Node,
-  count: number,
+  count: ?number,
 };
 
 export default function MenuItem({

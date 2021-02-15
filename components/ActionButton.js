@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import styles from "./ActionButton.module.css";
-import utilStyles from "../../styles/utils.module.css";
+import utilStyles from "../styles/utils.module.css";
 
 type Props = {
   isEnabled?: boolean,

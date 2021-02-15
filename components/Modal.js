@@ -15,11 +15,18 @@ type Props = {
   formName?: string,
   onCancel: () => void,
   onConfirm?: () => void,
+  confirmEnabled: boolean,
   width?: number,
+  size?: "Large" | "Small",
 };
 
 export default function Modal(props: Props): React.Node {
   const modalNode = React.useContext(Context);
+  const sizeStyle =
+    props.size && props.size === "Large"
+      ? styles.modalContentLarge
+      : styles.modalContentSmall;
+  let enabled = props.confirmEnabled ? "" : " pure-button-disabled";
 
   return modalNode
     ? ReactDOM.createPortal(
@@ -29,7 +36,7 @@ export default function Modal(props: Props): React.Node {
         >
           <div
             style={props.width != null ? { width: `${props.width}%` } : {}}
-            className={styles.modalContent}
+            className={`${styles.modalContent} ${sizeStyle}`}
           >
             {props.children}
             <div style={{ paddingTop: "1em" }}>
@@ -48,7 +55,7 @@ export default function Modal(props: Props): React.Node {
                   className={`pure-u-1-2 ${utilStyles.centeredButtonContainer}`}
                 >
                   <button
-                    className={`pure-button ${styles.button}`}
+                    className={`pure-button${enabled} ${styles.button}`}
                     form={props.formName}
                     onClick={props.onConfirm}
                   >

@@ -4,46 +4,21 @@ import * as React from "react";
 
 import utilStyles from "../styles/utils.module.css";
 
-import useSWR from "swr";
-import { type MenuType } from "../lib/ItemTypes.js";
-import HostGuestButton from "./buttons/HostGuestButton";
-import OrderButton from "./buttons/OrderButton";
+import { type MenuInfo } from "../lib/ItemTypes.js";
+import HostGuestButton from "./HostGuestButton";
+import OrderButton from "./OrderButton";
 import MenuList from "./MenuList";
+import useMenu from "../lib/useMenu";
 
-function useMenu() {
-  const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, mutate } = useSWR("/api/menu", fetcher, {
-    refreshInterval: 1000,
-  });
+export default function GuestInterface(menuData: MenuInfo): React.Node {
+  let [data, setData] = React.useState(menuData);
 
-  function mutateSpecific(id: number, count: ?number): void {
-    if (data?.counts != null) {
-      const newCounts = { ...data.counts, [id]: count };
-      mutate({ ...data, counts: newCounts }, false);
-    }
-  }
-
-  return [data?.menu, data?.counts, mutateSpecific];
-}
-
-export default function GuestInterface(menuData: MenuType): React.Node {
-  let [menu, setMenu] = React.useState(menuData.menu);
-  let [counts, setCounts] = React.useState(menuData.counts);
-
-  const [newMenu, newCounts, mutateSpecific] = useMenu();
-
-  if (newCounts != null && newCounts != counts) {
-    setCounts(newCounts);
-  }
-
-  if (newMenu != null && newMenu != menu) {
-    setMenu(newMenu);
-  }
+  const { mutateSpecific } = useMenu(setData, data);
 
   return (
     <>
       <MenuList
-        menuInfo={{ menu, counts }}
+        menuInfo={data.menu}
         CategoryHeaderComponent={({ category }) => (
           <span className={utilStyles.categoryTitle}>{category}</span>
         )}

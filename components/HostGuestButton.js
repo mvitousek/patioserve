@@ -16,9 +16,9 @@ export default function HostGuestButton({
   return (
     <Link href={href}>
       <a>
-          <button className={`pure-button ${styles.hostGuestButton}`}>
-            {text}
-          </button>
+        <button className={`pure-button ${styles.hostGuestButton}`}>
+          {text}
+        </button>
       </a>
     </Link>
   );

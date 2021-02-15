@@ -9,29 +9,19 @@
     "flow": "flow"
   },
   "dependencies": {
-    "@ionic/react": "^5.5.4",
-    "bootstrap": "^4.6.0",
-    "date-fns": "^2.17.0",
     "eslint-plugin-flowtype": "^5.2.0",
-    "express": "^4.17.1",
-    "gray-matter": "^4.0.2",
     "next": "^10.0.0",
     "purecss": "^2.0.5",
     "react": "17.0.1",
-    "react-bootstrap": "^1.4.3",
     "react-dom": "17.0.1",
-    "remark": "^13.0.0",
-    "remark-html": "^13.0.1",
     "swr": "^0.4.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.13",
     "@babel/core": "^7.12.13",
     "@babel/preset-flow": "^7.12.13",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0",
-    "flow-bin": "^0.144.0",
-    "prettier": "2.2.1"
+    "flow-bin": "^0.144.0"
   }
 }

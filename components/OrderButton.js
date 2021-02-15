@@ -3,11 +3,12 @@
 import * as React from "react";
 
 import ActionButton from "./ActionButton";
+import type { ItemID } from "../lib/ItemTypes";
 
 type ButtonProps = {
-  itemID: number,
+  itemID: ItemID,
   count: ?number,
-  mutateSpecific: (id: number, count: ?number) => void,
+  mutateSpecific: (id: ItemID, count: ?number) => void,
   text: string,
   api: string,
   mod: (number) => number,
@@ -30,7 +31,7 @@ export default function OrderButton({
           mutateSpecific(itemID, mod(count));
           fetch(api, {
             method: "POST",
-            body: itemID.toString(),
+            body: String(itemID),
           }).then(
             (resp) =>
               resp.json().then(({ count }) => mutateSpecific(itemID, count)),

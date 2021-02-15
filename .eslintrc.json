@@ -23,6 +23,7 @@
     ],
     "rules": {
         "react/no-unescaped-entities": [0, []],
-        "react/jsx-key": [0, []]
+        "react/jsx-key": [0, []],
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
     }
 }

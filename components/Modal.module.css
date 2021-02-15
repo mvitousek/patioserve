@@ -14,9 +14,19 @@
 /* Modal Content/Box */
 .modalContent {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
   max-width: 36rem;
+}
+
+.modalContentLarge {
+  max-height: 90vh;
+  margin: 5% auto; /* 15% from the top and centered */
+  width: 95%; /* Could be more or less, depending on screen size */
+}
+
+.modalContentSmall {
+  max-height: 60vh;
+  margin: 15% auto; /* 15% from the top and centered */
+  width: 80%; /* Could be more or less, depending on screen size */
 }

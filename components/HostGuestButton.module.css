@@ -2,7 +2,7 @@
 .hostGuestButton {
   position: fixed;
   bottom: 4px;
-  right: 10px;
+  right: max(10px, calc(calc(calc(100vw - 36rem) / 2) + 10px));
   height: 45px;
   width: 90px;
   border-color: #565d64;

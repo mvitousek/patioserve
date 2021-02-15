@@ -5,51 +5,49 @@ import * as React from "react";
 import utilStyles from "../styles/utils.module.css";
 
 import MenuItem from "./MenuItem";
-import { type MenuType } from "../lib/ItemTypes.js";
+import type { ItemID, CategoryID, Menu } from "../lib/ItemTypes";
 
 type Props = {
-  menuInfo: MenuType,
+  menuInfo: Menu,
   CategoryHeaderComponent: React.ComponentType<{
+    categoryID: CategoryID,
     category: string,
     count: number,
   }>,
   FirstButtonComponent: React.ComponentType<{
-    itemID: number,
+    itemID: ItemID,
     count: ?number,
   }>,
   SecondButtonComponent: React.ComponentType<{
-    itemID: number,
+    itemID: ItemID,
     count: ?number,
   }>,
 };
 
 export default function MenuList({
-  menuInfo: { menu, counts },
+  menuInfo: { structure, categories, items, counts },
   CategoryHeaderComponent,
   FirstButtonComponent,
   SecondButtonComponent,
 }: Props): React.Node {
-  let categoryMap = menu.categories.map((categoryName) =>
-    menu.items.filter(({ category }) => category === categoryName)
-  );
-
   return (
     <>
-      {menu.categories.map((categoryName, index) => (
-        <div className="pure-menu" key={index}>
+      {structure.map(([categoryID, category]) => (
+        <div className="pure-menu" key={String(categoryID)}>
           <CategoryHeaderComponent
-            category={categoryName}
-            count={categoryMap[index].length}
+            categoryID={categoryID}
+            category={categories[categoryID]}
+            count={category.length}
           />
           <ul className={"pure-menu-list " + utilStyles.stripedList}>
-            {categoryMap[index].map(({ id, itemInfo }) => (
+            {category.map((itemID) => (
               <MenuItem
-                key={itemInfo.name}
-                count={counts[id]}
-                itemInfo={itemInfo}
+                key={String(itemID)}
+                count={counts[itemID]}
+                itemInfo={items[itemID]}
               >
-                <FirstButtonComponent itemID={id} count={counts[id]} />
-                <SecondButtonComponent itemID={id} count={counts[id]} />
+                <FirstButtonComponent itemID={itemID} count={counts[itemID]} />
+                <SecondButtonComponent itemID={itemID} count={counts[itemID]} />
               </MenuItem>
             ))}
           </ul>
