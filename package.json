@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "15.x"
+    "node": "15.x",
+    "npm": "7.x"
   },
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
