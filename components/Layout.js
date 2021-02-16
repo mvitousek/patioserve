@@ -21,7 +21,10 @@ export default function Layout({
   return (
     <div className={styles.container}>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/favicon-32x32.png" />
+        <link rel="manifest" href="/pwa.webmanifest" />
+        <link rel="apple-touch-icon" href="/images/favicon-32x32.png" />
+        <meta name="theme-color" content="#666" />
         <meta name="description" content="Live menu for backyard gatherings" />
       </Head>
       <header className={styles.header}>

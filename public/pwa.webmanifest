@@ -1,0 +1,17 @@
+{
+  "name": "Patioserve",
+  "short_name": "Patioserve",
+  "description": "Simple menu app for pandemic-era backyard gatherings",
+  "icons": [
+    {
+      "src": "/images/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#666",
+  "background_color": "#f4f4f4",
+  "orientation": "portrait"
+}

@@ -12,5 +12,9 @@ export default function App<Props>({
   Component: React.ComponentType<Props>,
   pageProps: Props,
 }): React.Node {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Component {...pageProps} />
+    </>
+  );
 }

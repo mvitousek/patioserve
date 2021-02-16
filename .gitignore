@@ -30,3 +30,6 @@ yarn-error.log*
 .env.production.local
 
 .vscode/
+
+**/public/workbox-*.js
+**/public/sw.js
