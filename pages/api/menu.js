@@ -9,10 +9,8 @@ export const config = {
 };
 
 export default function handler(req: any, res: any) {
-  getMenu()
-    .then(
-      (toSend) => res.status(200).json(toSend),
-      () => res.status(500).send()
-    )
-    .catch(() => res.status(500).send());
+  getMenu().then(
+    (toSend) => res.status(200).json(toSend),
+    () => res.status(500).send()
+  );
 }
