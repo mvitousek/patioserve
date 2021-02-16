@@ -2,7 +2,17 @@
 
 import { getMenu } from "../../lib/AvailableItems";
 
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};
+
 export default function handler(req: any, res: any) {
-  let toSend = getMenu();
-  res.status(200).json(toSend);
+  getMenu()
+    .then(
+      (toSend) => res.status(200).json(toSend),
+      () => res.status(500).send()
+    )
+    .catch(() => res.status(500).send());
 }

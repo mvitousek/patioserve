@@ -9,7 +9,7 @@ import { getMenu } from "../lib/AvailableItems";
 import { type MenuInfo } from "../lib/ItemTypes";
 
 export async function getServerSideProps(): Promise<{ props: MenuInfo }> {
-  const menuItems = getMenu();
+  const menuItems = await getMenu();
   return {
     props: menuItems,
   };
