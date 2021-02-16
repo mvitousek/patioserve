@@ -5,9 +5,7 @@ import * as React from "react";
 import styles from "./EditRaw.module.css";
 import * as EditItem from "./EditItem";
 
-export default function EditCategory(
-  props: EditItem.Props<string>
-): React.Node {
+export default function EditRaw(props: EditItem.Props<string>): React.Node {
   const [body, setBody] = React.useState(props.itemInfo ?? "");
 
   React.useEffect(() => {

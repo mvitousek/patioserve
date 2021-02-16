@@ -20,7 +20,7 @@
 }
 
 .modalContentLarge {
-  max-height: 90vh;
+  max-height: max(90vh, calc(75vh + 200px));
   margin: 5% auto; /* 15% from the top and centered */
   width: 95%; /* Could be more or less, depending on screen size */
 }
@@ -29,4 +29,8 @@
   max-height: 60vh;
   margin: 15% auto; /* 15% from the top and centered */
   width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.button {
+  height: 40px;
 }

@@ -34,10 +34,7 @@ export default function Modal(props: Props): React.Node {
           style={{ display: props.show ? "block" : "none" }}
           className={styles.modal}
         >
-          <div
-            style={props.width != null ? { width: `${props.width}%` } : {}}
-            className={`${styles.modalContent} ${sizeStyle}`}
-          >
+          <div className={`${styles.modalContent} ${sizeStyle}`}>
             {props.children}
             <div style={{ paddingTop: "1em" }}>
               <div className="pure-g">
